@@ -1,4 +1,14 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 
-@Module({})
+import { DatabaseModule } from './database/database.module';
+import { HealthzModule } from './healthz/healthz.module';
+
+@Module({
+    imports: [
+        ConfigModule.forRoot(),
+        DatabaseModule,
+        HealthzModule,
+    ],
+})
 export class AppModule {}
