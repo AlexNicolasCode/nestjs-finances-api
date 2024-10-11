@@ -45,4 +45,8 @@ export class TransactionsService {
         this.transactionRepository.save(transaction);
         return transaction;
     }
+
+    delete({ id }: { id: string }) {
+        this.transactionRepository.softDelete({ id });
+    }
 } 
