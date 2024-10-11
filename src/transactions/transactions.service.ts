@@ -20,11 +20,15 @@ export class TransactionsService {
         });
     }
         
-    loadTransaction({ userId, id }: { userId: string; id: string }) {
-        return this.transactionRepository.findOne({
+    async loadTransaction({ userId, id }: { userId: string; id: string }) {
+        const transacion = await this.transactionRepository.findOne({
             select: ['id', 'title', 'type', 'categoryId', 'createdAt', 'updatedAt'],
             where: { id, userId },
         });
+        if (!transacion) {
+            throw new NotFoundException('Transaction not found'); 
+        }
+        return transacion;
     }
     
     create({ userId, title, type, isIgnored, categoryId }: CreateTransactionDto & { userId: string }): TransactionEntity {
