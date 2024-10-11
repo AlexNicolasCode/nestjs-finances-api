@@ -15,6 +15,7 @@ export class TransactionsService {
         
     loadTransactions({ userId }: { userId: string }) {
         return this.transactionRepository.find({
+            select: ['id', 'title', 'type', 'categoryId', 'createdAt', 'updatedAt'],
             where: { userId },
         });
     }
