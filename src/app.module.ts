@@ -1,14 +1,29 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { DatabaseModule } from './database/database.module';
 import { HealthzModule } from './healthz/healthz.module';
+import { AuthModule } from './auth';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
     imports: [
         ConfigModule.forRoot(),
-        DatabaseModule,
+        TypeOrmModule.forRoot({
+            type: 'postgres',
+            host: process.env.POSTGRES_HOST,
+            port: Number(process.env.POSTGRES_PORT),
+            username: process.env.POSTGRES_USER,
+            password: process.env.POSTGRES_PASSWORD,
+            database: process.env.POSTGRES_DB,
+            entities: [
+              __dirname + '/database/entities/*{.ts,.js}',
+            ],
+            migrations: [
+              __dirname + '/database/migrations/*{.ts,.js}',
+            ],
+        }),
         HealthzModule,
+        AuthModule,
     ],
 })
 export class AppModule {}
