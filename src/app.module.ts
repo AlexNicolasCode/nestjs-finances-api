@@ -21,6 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             migrations: [
               __dirname + '/database/migrations/*{.ts,.js}',
             ],
+            migrationsRun: true,
         }),
         HealthzModule,
         AuthModule,
