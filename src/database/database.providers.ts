@@ -12,10 +12,15 @@ export const databaseProviders = [
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
         entities: [
-          __dirname + '/../**/*.entity{.ts,.js}',
+          __dirname + '/entities/*{.ts,.js}',
+        ],
+        migrations: [
+          __dirname + '/migrations/*{.ts,.js}',
         ],
       });
-      return dataSource.initialize();
+      const dataSourceInstance = await dataSource.initialize();
+      await dataSourceInstance.runMigrations();
+      return dataSourceInstance;
     },
   },
 ];
