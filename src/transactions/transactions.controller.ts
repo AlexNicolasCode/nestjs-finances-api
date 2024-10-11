@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
 
 import { TransactionsService } from "./transactions.service";
 import { AuthGuard } from "src/guards";
 import { UserEntity } from "src/database/entities";
 import { GetUser } from "src/decorators";
-import { CreateTransactionDto } from "./dtos/create-transactions.dto";
+import { CreateTransactionDto, UpdateTransactionDto } from "./dtos";
 
 @Controller('transactions')
 @UseGuards(AuthGuard)
@@ -26,5 +26,13 @@ export class TransactionsController {
         @GetUser() user: UserEntity,
     ) {
         return this.transactionsService.loadTransactions({ userId: user.id });
+    }
+    
+    @Put(':id')
+    update(
+        @Param('id') id: string,
+        @Body() dto: UpdateTransactionDto,
+    ) {
+        return this.transactionsService.update({ id, ...dto });
     }
 }

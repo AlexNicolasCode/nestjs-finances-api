@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { TransactionEntity } from "src/database/entities";
-import { CreateTransactionDto } from "./dtos/create-transactions.dto";
+import { CreateTransactionDto, UpdateTransactionDto } from './dtos';
 
 @Injectable()
 export class TransactionsService {
@@ -12,6 +12,12 @@ export class TransactionsService {
         @InjectRepository(TransactionEntity)
         private readonly transactionRepository: Repository<TransactionEntity>,
     ) {}
+        
+    loadTransactions({ userId }: { userId: string }) {
+        return this.transactionRepository.find({
+            where: { userId },
+        });
+    }
     
     create({ userId, title, type, isIgnored, categoryId }: CreateTransactionDto & { userId: string }): TransactionEntity {
         const transaction = this.transactionRepository.create();
@@ -25,9 +31,18 @@ export class TransactionsService {
         return transaction;
     }
     
-    loadTransactions({ userId }: { userId: string }) {
-        return this.transactionRepository.find({
-            where: { userId },
+    async update({ id, title, type, isIgnored, categoryId }: UpdateTransactionDto & { id: string }): Promise<TransactionEntity> {
+        const transaction = await this.transactionRepository.findOne({
+            where: { id },
         });
+        if (!transaction) {
+            throw new NotFoundException('Transaction not found');
+        }
+        transaction.title = title;
+        transaction.type = type;
+        transaction.isIgnored = isIgnored;
+        transaction.categoryId = categoryId;
+        this.transactionRepository.save(transaction);
+        return transaction;
     }
 } 
