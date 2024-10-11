@@ -27,6 +27,14 @@ export class TransactionsController {
     ) {
         return this.transactionsService.loadTransactions({ userId: user.id });
     }
+
+    @Get(':id')
+    loadOne(
+        @Param('id') id: string,
+        @GetUser() user: UserEntity,
+    ) {
+        return this.transactionsService.loadTransaction({ userId: user.id, id });
+    }
     
     @Put(':id')
     update(

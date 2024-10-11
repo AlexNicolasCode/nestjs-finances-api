@@ -18,6 +18,13 @@ export class TransactionsService {
             where: { userId },
         });
     }
+        
+    loadTransaction({ userId, id }: { userId: string; id: string }) {
+        return this.transactionRepository.findOne({
+            select: ['id', 'title', 'type', 'categoryId', 'createdAt', 'updatedAt'],
+            where: { id, userId },
+        });
+    }
     
     create({ userId, title, type, isIgnored, categoryId }: CreateTransactionDto & { userId: string }): TransactionEntity {
         const transaction = this.transactionRepository.create();
