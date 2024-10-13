@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 
 import { AuthService, BcryptService } from "./services";
-import { JwtModule } from "src/jwt";
+import { JwtModule } from "src/modules/jwt";
 import { UserEntity } from "src/database/entities";
 import { AuthController } from "./auth.controller";
 import { TypeOrmModule } from "@nestjs/typeorm";

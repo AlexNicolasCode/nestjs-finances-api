@@ -2,7 +2,7 @@ import { DataSource } from "typeorm";
 import { Injectable, CanActivate, ExecutionContext, UnprocessableEntityException } from "@nestjs/common";
 
 import { UserEntity } from "src/database/entities";
-import { JwtService } from "src/jwt";
+import { JwtService } from "src/modules/jwt";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
