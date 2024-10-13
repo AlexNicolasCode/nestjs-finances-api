@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsString, IsUUID } from "class-validator";
+import { IsBoolean, IsEnum, IsNumber, IsString, IsUUID } from "class-validator";
 
 import { TransactionTypeEnum } from "src/database/enums/transaction-type.enum";
 
@@ -8,6 +8,9 @@ export class CreateTransactionDto {
 
     @IsEnum(TransactionTypeEnum)
     type: TransactionTypeEnum;
+
+    @IsNumber()
+    value: number;
 
     @IsUUID()
     categoryId: string;

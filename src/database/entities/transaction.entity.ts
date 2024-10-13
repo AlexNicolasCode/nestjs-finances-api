@@ -19,6 +19,9 @@ export class TransactionEntity {
     @Column('varchar')
     type: TransactionTypeEnum;
 
+    @Column('int')
+    value: number;
+
     @Column('boolean', { name: 'is_ignored', default: false })
     isIgnored: boolean;
 

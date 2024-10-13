@@ -9,6 +9,7 @@ export class CreateTransactionTable1728603910930 implements MigrationInterface {
                 category_id uuid NOT NULL,
                 user_id uuid NOT NULL,
                 type varchar NOT NULL,
+                value int16 NOT NULL,
                 is_ignored boolean DEFAULT false,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
