@@ -15,10 +15,10 @@ export class AuthGuard implements CanActivate {
   ): Promise<boolean> {
     const request = context.switchToHttp().getRequest() as Request;
     const token = this.getToken(request);
-    // const isValid = await this.jwtService.verifyToken(token);
-    // if (!isValid) {
-    //     throw new UnprocessableEntityException('Invalid token');
-    // }
+    const isValid = await this.jwtService.verifyToken(token);
+    if (!isValid) {
+        throw new UnprocessableEntityException('Invalid token');
+    }
     const tokenPayload = this.jwtService.descript(token) as any;
     request['user'] = { id: tokenPayload?.id };
     return true;
