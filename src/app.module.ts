@@ -2,9 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { HealthzModule } from './healthz/healthz.module';
-import { AuthModule } from './auth';
-import { TransactionModule } from './transactions';
+import { HealthzModule } from './modules/healthz/healthz.module';
+import { AuthModule } from './modules/auth';
+import { TransactionModule } from './modules/transactions';
 
 @Module({
     imports: [
