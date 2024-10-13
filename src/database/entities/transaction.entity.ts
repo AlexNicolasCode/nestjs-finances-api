@@ -25,6 +25,9 @@ export class TransactionEntity {
     @Column('boolean', { name: 'is_ignored', default: false })
     isIgnored: boolean;
 
+    @Column('timestamp', { name: 'scheduled_at' })
+    scheduledAt: Date;
+
     @CreateDateColumn({ name: 'created_at' })
     createdAt: Date;
 

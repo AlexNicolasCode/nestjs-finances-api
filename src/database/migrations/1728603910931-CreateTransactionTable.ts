@@ -11,7 +11,8 @@ export class CreateTransactionTable1728603910930 implements MigrationInterface {
                 type varchar NOT NULL,
                 value int16 NOT NULL,
                 is_ignored boolean DEFAULT false,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+                scheduled_at TIMESTAMP NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 deleted_at TIMESTAMP NULL
             );`

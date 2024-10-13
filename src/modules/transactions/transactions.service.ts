@@ -31,20 +31,21 @@ export class TransactionsService {
         return transacion;
     }
     
-    create({ userId, title, type, value, isIgnored, categoryId }: CreateTransactionDto & { userId: string }): TransactionEntity {
+    create({ userId, title, type, value, scheduledAt, isIgnored, categoryId }: CreateTransactionDto & { userId: string }): TransactionEntity {
         const transaction = this.transactionRepository.create();
         transaction.id = uuidv4();
         transaction.title = title;
         transaction.type = type;
         transaction.isIgnored = isIgnored;
         transaction.value = value;
+        transaction.scheduledAt = scheduledAt;
         transaction.categoryId = categoryId;
         transaction.userId = userId;
         this.transactionRepository.save(transaction);
         return transaction;
     }
     
-    async update({ id, title, type, value, isIgnored, categoryId }: UpdateTransactionDto & { id: string }): Promise<TransactionEntity> {
+    async update({ id, title, type, value, scheduledAt, isIgnored, categoryId }: UpdateTransactionDto & { id: string }): Promise<TransactionEntity> {
         const transaction = await this.transactionRepository.findOne({
             where: { id },
         });
@@ -55,6 +56,7 @@ export class TransactionsService {
         transaction.type = type;
         transaction.value = value;
         transaction.isIgnored = isIgnored;
+        transaction.scheduledAt = scheduledAt;
         transaction.categoryId = categoryId;
         this.transactionRepository.save(transaction);
         return transaction;

@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsNumber, IsString, IsUUID } from "class-validator";
+import { IsBoolean, IsDate, IsEnum, IsNumber, IsString, IsUUID } from "class-validator";
 
 import { TransactionTypeEnum } from "src/database/enums/transaction-type.enum";
 
@@ -11,6 +11,9 @@ export class UpdateTransactionDto {
 
     @IsNumber()
     value: number;
+
+    @IsDate()
+    scheduledAt: Date;
 
     @IsUUID()
     categoryId: string;
