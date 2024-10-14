@@ -1,11 +1,11 @@
-import { IsEnum, IsNumber, IsOptional } from "class-validator";
+import { IsEnum, IsOptional, IsString } from "class-validator";
 
 import { MonthsEnum } from "../../enums";
 
 export class LoadBalancesFilter {
     @IsOptional()
-    @IsNumber()
-    year?: number
+    @IsString()
+    year?: string;
 
     @IsOptional()
     @IsEnum(MonthsEnum)

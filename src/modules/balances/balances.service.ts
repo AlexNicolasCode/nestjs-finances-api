@@ -34,7 +34,7 @@ export class BalancesService {
 
     private generateRentAndDebit({ transactions, filters }: { transactions: TransactionEntity[]; filters: LoadBalancesFilter }): { rent: number; debit: number } {
         const rentAndDebit = { rent: 0, debit: 0 };
-        const monthTransactions = transactions.filter((transaction) => this.isMonthTransaction({ transaction, filters }));
+        const monthTransactions = transactions.filter((transaction) => this.isFiltedTransaction({ transaction, filters }));
         monthTransactions.forEach((t) => {
             const balanceMapper = {
                 [TransactionTypeEnum.RENT]: 'rent',
@@ -49,12 +49,14 @@ export class BalancesService {
         return rentAndDebit;
     }
 
-    private isMonthTransaction({ transaction, filters }: { transaction: TransactionEntity; filters: LoadBalancesFilter }): boolean {
+    private isFiltedTransaction({ transaction, filters }: { transaction: TransactionEntity; filters: LoadBalancesFilter }): boolean {
         const now = moment();
         const month = filters.month ?? now.month();
+        const year = Number(filters.year) ?? now.year();
         const scheduledAt = moment(transaction.scheduledAt).format('YYYY-MM-DD');
-        const firstDayOfMonth = now.month(month).format('YYYY-MM-01');
-        const lastDayOfMonth = now.month(month).endOf('month').format('YYYY-MM-DD');
+        const filtedDate = now.month(month).year(year);
+        const firstDayOfMonth = filtedDate.format('YYYY-MM-01');
+        const lastDayOfMonth = filtedDate.endOf('month').format('YYYY-MM-DD');
         if (scheduledAt >= firstDayOfMonth && scheduledAt <= lastDayOfMonth) {
             return true;
         }
