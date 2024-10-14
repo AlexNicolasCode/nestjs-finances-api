@@ -5,6 +5,7 @@ import { BalancesController } from "./balances.controller";
 import { BalancesService } from "./balances.service";
 import { TransactionEntity } from "src/database/entities";
 import { JwtModule } from "src/modules/jwt";
+import { BalancesRepository } from "./balances.repository";
 
 @Module({
     imports: [
@@ -14,6 +15,6 @@ import { JwtModule } from "src/modules/jwt";
         JwtModule,
     ],
     controllers: [BalancesController],
-    providers: [BalancesService],
+    providers: [BalancesService, BalancesRepository],
 })
 export class BalancesModule {}
