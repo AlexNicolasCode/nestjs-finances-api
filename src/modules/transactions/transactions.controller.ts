@@ -40,14 +40,16 @@ export class TransactionsController {
     update(
         @Param('id') id: string,
         @Body() dto: UpdateTransactionDto,
+        @GetUser() user: UserEntity,
     ) {
-        return this.transactionsService.update({ id, ...dto });
+        return this.transactionsService.update({ id, userId: user.id, ...dto });
     }
     
     @Delete(':id')
     delete(
         @Param('id') id: string,
+        @GetUser() user: UserEntity,
     ) {
-        return this.transactionsService.delete({ id });
+        return this.transactionsService.delete({ id, userId: user.id });
     }
 }

@@ -45,9 +45,10 @@ export class TransactionsService {
         return transaction;
     }
     
-    async update({ id, title, type, value, scheduledAt, isIgnored, categoryId }: UpdateTransactionDto & { id: string }): Promise<TransactionEntity> {
+    async update(params: UpdateTransactionDto & { userId: string; id: string }): Promise<TransactionEntity> {
+        const { userId, id, title, type, value, scheduledAt, isIgnored, categoryId } = params;
         const transaction = await this.transactionRepository.findOne({
-            where: { id },
+            where: { id, userId },
         });
         if (!transaction) {
             throw new NotFoundException('Transaction not found');
@@ -62,7 +63,7 @@ export class TransactionsService {
         return transaction;
     }
 
-    delete({ id }: { id: string }) {
-        this.transactionRepository.softDelete({ id });
+    delete({ id, userId }: { id: string; userId: string }) {
+        this.transactionRepository.softDelete({ id, userId });
     }
 } 
