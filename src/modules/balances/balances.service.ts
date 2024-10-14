@@ -1,11 +1,12 @@
-import moment from "moment";
+import  * as moment from "moment";
 import { Injectable } from "@nestjs/common";
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { TransactionEntity } from "src/database/entities";
 import { LoadBalancesResponse } from "./dtos/outputs";
-import { TransactionTypeEnum } from "src/database/enums/transaction-type.enum";
+import { TransactionTypeEnum } from "src/database/enums";
+import { LoadBalancesFilter } from "./dtos/inputs";
 
 @Injectable()
 export class BalancesService {
@@ -14,7 +15,7 @@ export class BalancesService {
         private readonly transactionRepository: Repository<TransactionEntity>,
     ) {}
         
-    async loadBalances({ userId }: { userId: string }): Promise<LoadBalancesResponse> {
+    async loadBalances({ userId, filters }: { userId: string; filters: LoadBalancesFilter }): Promise<LoadBalancesResponse> {
         const response: LoadBalancesResponse = {
             balance: 0,
             rent: 0,
@@ -25,15 +26,15 @@ export class BalancesService {
             where: { userId },
         });
         transactions.forEach((t) => response.balance += t.value);
-        const { rent, debit } = this.generateRentAndDebit(transactions);
+        const { rent, debit } = this.generateRentAndDebit({ transactions, filters });
         response.rent = rent;
         response.debit = debit;
         return response;
     }
 
-    private generateRentAndDebit(transactions: TransactionEntity[]): { rent: number; debit: number } {
-        const rentAndDebit = { rent: 0, debit: 0 } ;
-        const monthTransactions = transactions.filter((t) => this.isMonthTransaction(t));
+    private generateRentAndDebit({ transactions, filters }: { transactions: TransactionEntity[]; filters: LoadBalancesFilter }): { rent: number; debit: number } {
+        const rentAndDebit = { rent: 0, debit: 0 };
+        const monthTransactions = transactions.filter((transaction) => this.isMonthTransaction({ transaction, filters }));
         monthTransactions.forEach((t) => {
             const balanceMapper = {
                 [TransactionTypeEnum.RENT]: 'rent',
@@ -48,11 +49,13 @@ export class BalancesService {
         return rentAndDebit;
     }
 
-    private isMonthTransaction(transaction: TransactionEntity): boolean {
-        const scheduledAt = moment(transaction.scheduledAt);
-        const startOfMonth = moment().startOf('month');
-        const endOfMonth = moment().endOf('month');
-        if (scheduledAt >= startOfMonth && scheduledAt <= endOfMonth) {
+    private isMonthTransaction({ transaction, filters }: { transaction: TransactionEntity; filters: LoadBalancesFilter }): boolean {
+        const now = moment();
+        const month = filters.month ?? now.month();
+        const scheduledAt = moment(transaction.scheduledAt).format('YYYY-MM-DD');
+        const firstDayOfMonth = now.month(month).format('YYYY-MM-01');
+        const lastDayOfMonth = now.month(month).endOf('month').format('YYYY-MM-DD');
+        if (scheduledAt >= firstDayOfMonth && scheduledAt <= lastDayOfMonth) {
             return true;
         }
         return false;
