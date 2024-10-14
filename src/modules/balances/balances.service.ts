@@ -11,11 +11,12 @@ export class BalancesService {
     ) {}
         
     async loadBalances(params: LoadBalanceRequest): Promise<LoadBalancesResponse> {
-        const [balance, debit, rent] = await Promise.all([
+        const [current, utilDate, debit, rent] = await Promise.all([
             this.balancesRepository.loadBalance(params.userId),
+            this.balancesRepository.loadBalanceUntilEnd(params),
             this.balancesRepository.loadDebit(params),
             this.balancesRepository.loadRent(params),
         ]);
-        return { balance, rent, debit };
+        return { current, utilDate, rent, debit };
     }
 } 

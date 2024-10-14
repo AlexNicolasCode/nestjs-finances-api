@@ -21,6 +21,17 @@ export class BalancesRepository {
         const queryResult = await query.getRawOne<{ sum: string }>();
         return this.getSumValue(queryResult?.sum);  
     }
+    
+    async loadBalanceUntilEnd(params: LoadBalanceRequest): Promise<number> {
+        const { userId, filters } = params;
+        const { endAt } = this.generateDatesFilter(filters)
+        const query = this.transactionRepository.createQueryBuilder('t');
+        query.select('SUM(t.value)')
+        query.where('t.user_id = :userId', { userId })
+        query.andWhere('t.scheduled_at <= :endAt', { endAt });
+        const queryResult = await query.getRawOne<{ sum: string }>();
+        return this.getSumValue(queryResult?.sum);
+    }
 
     async loadRent(params: LoadBalanceRequest): Promise<number> {
         const query = this.buildRentAndDebitQuery(params);

@@ -1,5 +1,6 @@
 export type LoadBalancesResponse = {
-    balance: number;
+    current: number;
+    utilDate: number;
     rent: number;
     debit: number;
 }
