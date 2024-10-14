@@ -1,7 +1,6 @@
 import { v4 as uuidV4 } from "uuid";
 import { Injectable, CanActivate, ExecutionContext, UnprocessableEntityException } from "@nestjs/common";
-
-import { JwtService } from "src/modules/jwt";
+import { JwtService } from "src/modules/auth/services";
 
 @Injectable()
 export class AuthGuard implements CanActivate {

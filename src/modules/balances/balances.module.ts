@@ -4,15 +4,15 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { BalancesController } from "./balances.controller";
 import { BalancesService } from "./balances.service";
 import { TransactionEntity } from "src/database/entities";
-import { JwtModule } from "src/modules/jwt";
 import { BalancesRepository } from "./balances.repository";
+import { AuthModule } from "../auth";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             TransactionEntity,
         ]),
-        JwtModule,
+        AuthModule,
     ],
     controllers: [BalancesController],
     providers: [BalancesService, BalancesRepository],
