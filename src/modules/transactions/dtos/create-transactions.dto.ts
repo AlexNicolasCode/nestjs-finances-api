@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsEnum, IsNumber, IsString, IsUUID } from "class-validator";
+import { IsBoolean, IsDateString, IsEnum, IsNumber, IsString, IsUUID } from "class-validator";
 
 import { TransactionTypeEnum } from "src/database/enums/transaction-type.enum";
 
@@ -12,7 +12,7 @@ export class CreateTransactionDto {
     @IsNumber()
     value: number;
 
-    @IsDate()
+    @IsDateString()
     scheduledAt: Date;
 
     @IsUUID()
