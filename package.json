@@ -1,5 +1,5 @@
 {
-  "name": "auth-study",
+  "name": "finances-api",
   "version": "1.0.0",
   "main": "dist/src/main",
   "scripts": {
