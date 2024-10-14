@@ -1,7 +1,6 @@
-import { DataSource } from "typeorm";
+import { v4 as uuidV4 } from "uuid";
 import { Injectable, CanActivate, ExecutionContext, UnprocessableEntityException } from "@nestjs/common";
 
-import { UserEntity } from "src/database/entities";
 import { JwtService } from "src/modules/jwt";
 
 @Injectable()
@@ -14,6 +13,11 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): Promise<boolean> {
     const request = context.switchToHttp().getRequest() as Request;
+    if (process.env.NODE_ENV === 'dev') {
+      const mockedUserId = process.env.MOCKED_USER_ID ?? uuidV4();
+      request['user'] = { id: mockedUserId };
+      return true;
+    }
     const token = this.getToken(request);
     const isValid = await this.jwtService.verifyToken(token);
     if (!isValid) {
